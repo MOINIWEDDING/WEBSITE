@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Boda - Nicole y Moisés</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Pinyon+Script&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        body, html { margin: 0; padding: 0; width: 100%; min-height: 100%; background-color: #5c0f1a; background-image: url('Diseño sin título (6).png'); background-blend-mode: multiply; background-size: cover; background-attachment: fixed; background-position: center; color: #ffffff; font-family: 'Cinzel', serif; overflow-x: hidden; }
+        
+        .fade-in-section { opacity: 0; transform: translateY(40px); transition: opacity 1.2s ease-out, transform 1.2s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+
+        .encaje { position: fixed; top: 0; left: 0; width: 280px; z-index: 1000; pointer-events: none; mix-blend-mode: screen; opacity: 0.8; }
+        
+        /* --- PANTALLA INICIO --- */
+        #pantalla-inicio { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 500; background: rgba(92, 15, 26, 0.8); backdrop-filter: blur(10px); transition: opacity 1.2s ease-in-out, visibility 1.2s; }
+        .pre-titulo { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+        .titulo-sello { font-family: 'Pinyon Script', cursive; font-size: 4.5rem; margin: 0 0 40px 0; font-weight: normal; text-align: center; }
+        .sello-btn { background-color: #fdfbf7; color: #5c0f1a; border: none; border-radius: 50%; width: 130px; height: 130px; font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s, box-shadow 0.4s; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; text-transform: uppercase; }
+        .sello-btn:hover { transform: scale(1.1); box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
+        .sello-iniciales { font-family: 'Pinyon Script', cursive; font-size: 2.5rem; margin-bottom: 5px; line-height: 1; }
+        
+        /* --- CONTENIDO PRINCIPAL --- */
+        #invitacion-contenido { display: none; flex-direction: column; align-items: center; width: 100%; padding: 80px 0; }
+        
+        .carta-vertical { position: relative; width: 85%; max-width: 450px; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 200px 200px 25px 25px; padding: 80px 30px 60px 30px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.4); margin-bottom: 60px; background: rgba(92, 15, 26, 0.4); backdrop-filter: blur(5px); }
+        .carta-vertical::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 190px 190px 15px 15px; pointer-events: none; }
+        .flores-decoracion { position: absolute; width: 250px; mix-blend-mode: screen; pointer-events: none; z-index: 10; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
+        .flores-arriba { top: -60px; left: -50px; transform: rotate(45deg); }
+        .flores-abajo { bottom: -80px; right: -60px; transform: rotate(-135deg); }
+        .fecha-top { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 20px; }
+        .nombres-carta { font-family: 'Pinyon Script', cursive; font-size: 4rem; line-height: 1.1; margin: 20px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .divisor { width: 50px; height: 1px; background-color: #ffffff; margin: 30px auto; }
+        .texto-formal { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 0.9rem; line-height: 1.8; letter-spacing: 1px; }
+        
+        /* --- CONTADOR Y FRASES --- */
+        .contador-container { display: flex; justify-content: center; gap: 15px; margin: 40px 0; }
+        .tiempo { display: flex; flex-direction: column; align-items: center; background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 20px; min-width: 60px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: transform 0.3s; }
+        .tiempo:hover { transform: translateY(-5px); }
+        .numero { font-size: 2rem; font-weight: 600; }
+        .etiqueta { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+        .frase-container { margin-top: 20px; padding: 15px; font-style: italic; color: #ffd700; transition: opacity 0.5s; text-align: center; min-height: 40px; }
+
+        /* --- BOTONES MINIMALISTAS --- */
+        .botones-grid { display: flex; gap: 20px; justify-content: center; margin: 40px 0; flex-wrap: wrap; }
+        .btn-curvo { background-color: #fdfbf7; color: #5c0f1a; border: none; border-radius: 30px; padding: 15px 30px; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9rem; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .btn-curvo:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.6); background-color: #ffffff; }
+
+        /* --- MAPA Y FORMULARIO --- */
+        .seccion-curva { width: 85%; max-width: 600px; text-align: center; margin-bottom: 80px; }
+        .iframe-curvo { width: 100%; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px; margin-top: 20px; filter: grayscale(20%) contrast(110%); box-shadow: 0 15px 35px rgba(0,0,0,0.4); transition: transform 0.4s ease; background: rgba(255,255,255,0.05); }
+        .iframe-curvo:hover { transform: scale(1.01); }
+        
+        /* --- POPUPS / MODALES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 5000; opacity: 0; visibility: hidden; transition: all 0.4s ease; backdrop-filter: blur(8px); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content { background: #5c0f1a; border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 40px 25px; width: 85%; max-width: 450px; position: relative; transform: scale(0.8) translateY(30px); transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; max-height: 85vh; overflow-y: auto; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .btn-cerrar { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: #ffd700; transition: transform 0.3s; line-height: 1; }
+        .btn-cerrar:hover { transform: rotate(90deg) scale(1.2); }
+        .modal-titulo { font-family: 'Pinyon Script', cursive; font-size: 3.5rem; margin: 0 0 10px 0; color: #ffffff; line-height: 1; }
+    </style>
+</head>
+<body>
+
+    <audio id="musicaFondo" loop><source src="Olivia Rodrigo - honeybee (instrumental) - Dannylation.mp3" type="audio/mpeg"></audio>
+
+
+    <div id="pantalla-inicio">
+        <p class="pre-titulo">Una carta de amor de</p>
+        <h1 class="titulo-sello">Nicole & Moisés</h1>
+        <button class="sello-btn" onclick="abrirInvitacion()">
+            <span class="sello-iniciales">N & M</span>
+            Abrir
+        </button>
+    </div>
+
+    <div id="invitacion-contenido">
+        <div class="carta-vertical fade-in-section">
+            <img src="flores.png" class="flores-decoracion flores-arriba" alt="Flores">
+            <img src="flores.png" class="flores-decoracion flores-abajo" alt="Flores">
+            <div class="fecha-top">SAVE THE DATE</div>
+            <h2 class="nombres-carta">Nicole<br>&<br>Moisés</h2>
+            <div class="divisor"></div>
+            <p class="texto-formal">Nos complace invitarte a ser testigo del comienzo de nuestra mayor aventura.</p>
+            <h3 style="letter-spacing: 4px; font-size: 1.3rem; margin-top: 30px;">08 . 05 . 2027</h3>
+        </div>
+
+        <div class="seccion-curva fade-in-section">
+            <div class="contador-container">
+                <div class="tiempo"><span class="numero" id="dias">00</span><span class="etiqueta">Días</span></div>
+                <div class="tiempo"><span class="numero" id="horas">00</span><span class="etiqueta">Hrs</span></div>
+                <div class="tiempo"><span class="numero" id="minutos">00</span><span class="etiqueta">Min</span></div>
+                <div class="tiempo"><span class="numero" id="segundos">00</span><span class="etiqueta">Seg</span></div>
+            </div>
+            <div class="frase-container">
+                <p id="frase-divertida" class="texto-formal">Cargando sugerencias de espera...</p>
+            </div>
+        </div>
+
+        <div class="botones-grid fade-in-section">
+            <button class="btn-curvo" onclick="abrirModal('modal-regalo')">Lista de Regalos</button>
+            <button class="btn-curvo" onclick="abrirModal('modal-ropa')">Dress Code</button>
+        </div>
+
+        <div class="seccion-curva fade-in-section">
+            <p class="pre-titulo">Acompáñanos en</p>
+            <h2 style="letter-spacing: 2px; font-size: 2rem; margin: 10px 0;">178 BAR</h2>
+            <p class="texto-formal">Santiago de los Caballeros</p>
+            <iframe class="iframe-curvo" src="https://maps.google.com/maps?q=178+Bar+Santiago+Dominican+Republic&output=embed" height="350" frameborder="0" scrolling="no"></iframe>
+        </div>
+
+        <div class="seccion-curva fade-in-section">
+            <h2 class="titulo-sello" style="font-size: 3.5rem; margin-bottom: 20px;">RSVP</h2>
+            <p class="texto-formal" style="margin-bottom: 20px;">Por favor, confirma tu asistencia en el siguiente formulario:</p>
+            <iframe class="iframe-curvo" src="https://docs.google.com/forms/d/e/1FAIpQLSeycezh7tk_ADSZ98pJB_jSo30aFFlHOUXZwM6LQc5qv2WioA/viewform?embedded=true" height="600" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+        </div>
+    </div>
+
+    <div id="modal-regalo" class="modal-overlay">
+        <div class="modal-content">
+            <span class="btn-cerrar" onclick="cerrarModal('modal-regalo')">×</span>
+            <h2 class="modal-titulo">Regalos</h2>
+            <p class="texto-formal" style="margin-bottom: 30px;">Tu presencia es nuestro mayor regalo. Si deseas tener un detalle con nosotros, hemos preparado una lista para nuestra futura vida juntos:</p>
+            
+                
+                <p class="texto-formal" style="font-size: 0.85rem; margin: 0; text-align: center;">Explora nuestra lista de bodas oficial en Amazon.</p>
+                
+                <a href="https://www.amazon.com/wedding/guest-view/3RAXSDOWL8ZNA" target="_blank" class="btn-curvo" style="text-decoration: none; display: inline-flex; justify-content: center; width: 85%; margin-top: 10px; background-color: #ffffff; color: #5c0f1a; font-size: 0.8rem;">
+                    Ver Lista de Bodas
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ropa" class="modal-overlay">
+        <div class="modal-content">
+            <span class="btn-cerrar" onclick="cerrarModal('modal-ropa')">×</span>
+            <h2 class="modal-titulo">Inspírate</h2>
+            <p class="texto-formal" style="margin-bottom: 30px;">(No olvides que el blanco está completamente prohibido)</p>
+                
+                <p class="texto-formal" style="font-size: 0.85rem; margin: 0; text-align: center;">Explora nuestro tablero de inspiración.</p>
+                
+                <a href="https://www.pinterest.com/niniemuti/moini-dress-code-wed/" target="_blank" class="btn-curvo" style="text-decoration: none; display: inline-flex; justify-content: center; width: 85%; margin-top: 10px; background-color: #ffffff; color: #5c0f1a; font-size: 0.8rem;">
+                    Ver Inspiración
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const listaFrases = [
+            "Aprender a bailar sin pisar a nadie.", "Dominar el arte de elegir el outfit perfecto.",
+            "Leer todos los libros pendientes.", "Practicar caras para las fotos de la boda.",
+            "Aprender a cocinar algo nuevo cada semana.", "Intentar que el gato nos haga caso.",
+            "Ahorrar para una aventura inolvidable.", "Dominar el arte de la paciencia.",
+            "Aprender frases románticas en otro idioma.", "Planear la luna de miel soñada."
+        ];
+
+        function cambiarFrase() {
+            const el = document.getElementById("frase-divertida");
+            if(el) {
+                el.style.opacity = 0;
+                setTimeout(() => {
+                    el.innerText = listaFrases[Math.floor(Math.random() * listaFrases.length)];
+                    el.style.opacity = 1;
+                }, 500);
+            }
+        }
+        setInterval(cambiarFrase, 10000);
+
+        function abrirInvitacion() {
+            document.getElementById('musicaFondo').play();
+            const inicio = document.getElementById('pantalla-inicio');
+            const contenido = document.getElementById('invitacion-contenido');
+            inicio.style.opacity = '0';
+            setTimeout(() => {
+                inicio.style.visibility = 'hidden';
+                contenido.style.display = 'flex'; 
+            }, 1000); 
+        }
+
+        function abrirModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        function cerrarModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+
+        const fechaBoda = new Date("May 8, 2027 16:00:00").getTime();
+        setInterval(function() {
+            const distancia = fechaBoda - new Date().getTime();
+            document.getElementById("dias").innerHTML = Math.floor(distancia / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("horas").innerHTML = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutos").innerHTML = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("segundos").innerHTML = Math.floor((distancia % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }, 1000);
+    </script>
+</body>
+</html>
